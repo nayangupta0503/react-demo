@@ -56,7 +56,7 @@ const LoginForm = () => {
               type={showPassword ? 'text' : 'password'}
               id="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) =>setPassword(e.target.value)}
               required
             />
             <button type="button" className="eye-button" onClick={togglePasswordVisibility}>

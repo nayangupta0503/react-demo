@@ -1,16 +1,50 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { db } from "./firebase";
 import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 
 import { useNavigate } from "react-router-dom";
 
+
 export default function App() {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
+  const [password, setPassword] = useState('');
+
+  const validatePassword = (password) => {
+    const minLength = 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (password.length < minLength) {
+      return `Password must be at least ${minLength} characters long.`;
+    }
+    if (!hasUpperCase) {
+      return 'Password must contain at least one uppercase letter.';
+    }
+    if (!hasLowerCase) {
+      return 'Password must contain at least one lowercase letter.';
+    }
+    if (!hasNumber) {
+      return 'Password must contain at least one number.';
+    }
+    if (!hasSpecialChar) {
+      return 'Password must contain at least one special character.';
+    }
+    return '';
+  };
 
   const submit = async (event) => {
     event.preventDefault();
+
+    const passwordValidationMessage = validatePassword(password);
+    if (passwordValidationMessage) {
+      setPasswordError(passwordValidationMessage);
+      return;
+    }
     const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
 
     try {
       // Create a query to check if the email already exists
@@ -36,6 +70,10 @@ export default function App() {
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <>
     <div className="form-container">
@@ -48,13 +86,24 @@ export default function App() {
           <input type="email" id="email"/>
           </label>
         </div>
-        <div className="form-group">
-        <label>Password
+        <div className="form-group password-group">
+        <label>Password</label>
+        <div className="password-input-wrapper">
         <input
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           id="password"
-        />
-        </label>
+          value={password}
+          onChange={(e) =>{ 
+            setPassword(e.target.value);
+            setPasswordError('');
+          }}
+          required
+          />
+        <button type="button" className="eye-button" onClick={togglePasswordVisibility}>
+              {showPassword ? '🙈' : '👁️'}
+            </button>
+        </div>
+        {passwordError && <p className="error-message">{passwordError}</p>}
         </div>
         <button className="submit-button" type="submit" id="submit">
           Register
