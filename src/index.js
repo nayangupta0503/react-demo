@@ -4,11 +4,13 @@ import './index.css';
 import App from './App';
 import About from './pages/about';
 import Navbar from './components/Navbar';
+import Login from './pages/LoginForm';
 import reportWebVitals from './reportWebVitals';
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import LoginForm from './pages/LoginForm';
 
 const router = createBrowserRouter([
   {
@@ -16,8 +18,8 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: "/save",
-    element: <App />,
+    path: "/login",
+    element: <Login />,
   },
   {
     path: "/about",
