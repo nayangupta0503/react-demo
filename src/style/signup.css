@@ -45,28 +45,26 @@
     background-color: #0056b3;
   }
 
-  .password-group {
-  position: relative;
-}
-
-.password-input-wrapper {
-  display: flex;
-  align-items: center;
-}
-
-.password-input-wrapper input {
-  width: calc(100% - 40px);
-  padding-right: 40px; /* Ensure there's space for the eye button */
-}
-
-.eye-button {
-  position: absolute;
-  right: 10px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-}
+  .password-input-wrapper {
+    position: relative;
+    width: 100%;
+  }
+  
+  .password-input-wrapper input {
+    width: 100%;
+    padding-right: 40px; /* Ensure there's space for the eye button */
+  }
+  
+  .eye-button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+  }
