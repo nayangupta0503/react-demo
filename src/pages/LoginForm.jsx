@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { db } from '../firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
+import "../style/signup.css";
 
 const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -28,6 +30,10 @@ const LoginForm = () => {
         }
     };
 
+    const togglePasswordVisibility = () => {
+      setShowPassword(!showPassword);
+    };
+
   return (
     <div className='form-container'>
       <h1>Login Form</h1><br /><br />
@@ -43,23 +49,27 @@ const LoginForm = () => {
             />
           </label>
         </div>
-        <div className='form-group'>
-          <label>
-            Password
+        <div className="form-group password-group">
+          <label htmlFor="password">Password:</label>
+          <div className="password-input-wrapper">
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
+              id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-          </label>
+            <button type="button" className="eye-button" onClick={togglePasswordVisibility}>
+              {showPassword ? '🙈' : '👁️'}
+            </button>
+          </div>
         </div>
         <button type="submit" className='submit-button'>Login</button>
       </form><br /><br />
       <label>
-        New User?
+        New User?{" "}
         <a href="/">
-          <button>Register</button>
+          <button> Register</button>
         </a>
       </label>
     </div>

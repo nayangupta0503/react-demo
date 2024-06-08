@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { db } from "./firebase";
 import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
-import "./style/signup.css";
+
 import { useNavigate } from "react-router-dom";
 
 export default function App() {
@@ -37,21 +37,24 @@ export default function App() {
   };
 
   return (
+    <>
     <div className="form-container">
       <label>Sign up!!</label>
       <br />
       <br />
       <form onSubmit={submit} className="register-form">
         <div className="form-group">
-          <label>Email</label>
+          <label>Email
           <input type="email" id="email"/>
+          </label>
         </div>
         <div className="form-group">
-        <label>Password</label>
+        <label>Password
         <input
           type="password"
           id="password"
         />
+        </label>
         </div>
         <button className="submit-button" type="submit" id="submit">
           Register
@@ -66,5 +69,9 @@ export default function App() {
         </a>
       </label>
     </div>
+
+    <input type="password" id="pass"/>
+
+    </>
   );
 }
