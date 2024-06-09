@@ -9,6 +9,7 @@ export default function App() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = useState('');
+  const [passwordValidation, setPasswordValidation] = useState({});
   const [password, setPassword] = useState('');
 
   const validatePassword = (password) => {
@@ -18,26 +19,20 @@ export default function App() {
     const hasNumber = /[0-9]/.test(password);
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
-    if (password.length < minLength) {
-      return `Password must be at least ${minLength} characters long.`;
-    }
-    if (!hasUpperCase) {
-      return 'Password must contain at least one uppercase letter.';
-    }
-    if (!hasLowerCase) {
-      return 'Password must contain at least one lowercase letter.';
-    }
-    if (!hasNumber) {
-      return 'Password must contain at least one number.';
-    }
-    if (!hasSpecialChar) {
-      return 'Password must contain at least one special character.';
-    }
-    return '';
+    return {
+      minLength: password.length >= minLength,
+      hasUpperCase,
+      hasLowerCase,
+      hasNumber,
+      hasSpecialChar,
+    };
   };
 
   const submit = async (event) => {
     event.preventDefault();
+
+    const passwordValidationResult = validatePassword(password);
+    const isPasswordValid = Object.values(passwordValidationResult).every(Boolean);
 
     const passwordValidationMessage = validatePassword(password);
     if (passwordValidationMessage) {
@@ -73,6 +68,14 @@ export default function App() {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+  
+  const handlePasswordChange = (e) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    setPasswordValidation(validatePassword(newPassword));
+  };
+
+  const { minLength, hasUpperCase, hasLowerCase, hasNumber, hasSpecialChar } = passwordValidation;
 
   return (
     <>
@@ -93,17 +96,20 @@ export default function App() {
           type={showPassword ? 'text' : 'password'}
           id="password"
           value={password}
-          onChange={(e) =>{ 
-            setPassword(e.target.value);
-            setPasswordError('');
-          }}
+          onChange={handlePasswordChange}
           required
           />
         <button type="button" className="eye-button" onClick={togglePasswordVisibility}>
               {showPassword ? '🙈' : '👁️'}
             </button>
         </div>
-        {passwordError && <p className="error-message">{passwordError}</p>}
+        <div className="password-requirements">
+            {!minLength && <p className="invalid">At least 8 characters long</p>}
+            {!hasUpperCase && <p className="invalid">At least one uppercase letter</p>}
+            {!hasLowerCase && <p className="invalid">At least one lowercase letter</p>}
+            {!hasNumber && <p className="invalid">At least one number</p>}
+            {!hasSpecialChar && <p className="invalid">At least one special character</p>}
+          </div>
         </div>
         <button className="submit-button" type="submit" id="submit">
           Register

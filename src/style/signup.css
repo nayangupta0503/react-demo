@@ -74,3 +74,16 @@
     font-size: 14px;
     margin-top: 5px;
   }
+
+  .password-requirements {
+    margin-top: 10px;
+  }
+  
+  .password-requirements p {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+  
+  .invalid {
+    color: red;
+  }
