@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { db } from "./firebase";
 import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
-
 import { useNavigate } from "react-router-dom";
 
 
 export default function App() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [passwordError, setPasswordError] = useState('');
   const [passwordValidation, setPasswordValidation] = useState({});
   const [password, setPassword] = useState('');
 
@@ -28,17 +26,28 @@ export default function App() {
     };
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+  
+  const handlePasswordChange = (e) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    setPasswordValidation(validatePassword(newPassword));
+  };
+
   const submit = async (event) => {
+
     event.preventDefault();
 
     const passwordValidationResult = validatePassword(password);
     const isPasswordValid = Object.values(passwordValidationResult).every(Boolean);
 
-    const passwordValidationMessage = validatePassword(password);
-    if (passwordValidationMessage) {
-      setPasswordError(passwordValidationMessage);
+    if (!isPasswordValid) {
+      setPasswordValidation(passwordValidationResult);
       return;
     }
+    
     const email = document.getElementById("email").value;
 
     try {
@@ -63,16 +72,6 @@ export default function App() {
       console.error("Error adding document: ", e);
       alert("Error storing data in Firestore.");
     }
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-  
-  const handlePasswordChange = (e) => {
-    const newPassword = e.target.value;
-    setPassword(newPassword);
-    setPasswordValidation(validatePassword(newPassword));
   };
 
   const { minLength, hasUpperCase, hasLowerCase, hasNumber, hasSpecialChar } = passwordValidation;
@@ -101,7 +100,7 @@ export default function App() {
           />
         <button type="button" className="eye-button" onClick={togglePasswordVisibility}>
               {showPassword ? '🙈' : '👁️'}
-            </button>
+        </button>
         </div>
         <div className="password-requirements">
             {!minLength && <p className="invalid">At least 8 characters long</p>}
@@ -109,7 +108,7 @@ export default function App() {
             {!hasLowerCase && <p className="invalid">At least one lowercase letter</p>}
             {!hasNumber && <p className="invalid">At least one number</p>}
             {!hasSpecialChar && <p className="invalid">At least one special character</p>}
-          </div>
+        </div>
         </div>
         <button className="submit-button" type="submit" id="submit">
           Register
@@ -124,9 +123,6 @@ export default function App() {
         </a>
       </label>
     </div>
-
-    <input type="password" id="pass"/>
-
     </>
   );
 }
