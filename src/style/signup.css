@@ -46,6 +46,17 @@
   }
 
   .password-input-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  .password-input-wrapper input {
+    flex-grow: 1;
+    background-color: #fff; /* Ensure password input field has a white background */
+  }
+
+  .password-input-wrapper {
     position: relative;
     width: 100%;
   }
@@ -86,4 +97,11 @@
   
   .invalid {
     color: red;
+  }
+
+  @media (max-width: 600px) {
+    .form-container {
+      width: 90%;
+      padding: 10px;
+    }
   }
